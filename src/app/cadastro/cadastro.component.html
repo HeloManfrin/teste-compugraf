@@ -2,19 +2,40 @@
 
   <h1 class="container px-4 text-center">Cadastro de cliente</h1>
   <p>Favor preencher seu cadastro.</p>
-  <form #f="ngForm">
+  <form #f="ngForm" [formGroup]="formCadastro">
 
 
 
-    <div class="row">
-      <div class="col" [formGroup]="formCadastro">
-        <input type="text" class="form-control" formControlName="cep" placeholder="Digite o seu cep" aria-label="cep">
-
-        <input type="text" class="form-control" formControlName="nome" placeholder="Digite o seu cep" aria-label="nome">
+    <div class="row gx-5">
+      <div class="col-4">
+        <input type="text" class="form-control " formControlName="nome" placeholder="Digite seu nome" aria-label="nome">
+        <input type="text" class="form-control mt-3" formControlName="cep" placeholder=" Digite o seu cep" aria-label="cep">
       </div>
       <br><br>
     </div>
-    <button type="button" (click)="getCep()" class="btn btn-primary">Calcular</button>
+    <button type="button" [disabled]="formCadastro.invalid" (click)="getCep()" class="btn btn-success mt-3">Calcular</button>
   </form>
+  <div *ngIf="freteTable">
+    <h3 class="container px-4 text-center mt-5">Informações de frete</h3>
+    <table class="table">
+      <thead>
+        <tr>
 
+          <th scope="col">Distância</th>
+          <th scope="col">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+
+          <td>{{ this.responseCadastroDis}}</td>
+          <td>{{ this.valueFrete}}</td>
+        </tr>
+
+
+      </tbody>
+    </table>
+    <button type="button" [disabled]="formCadastro.invalid" (click)="contratar()" class="btn btn-primary mt-3">Contratar</button>
+
+  </div>
 </div>

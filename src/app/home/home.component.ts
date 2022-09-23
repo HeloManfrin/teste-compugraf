@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { HomeService } from './home.service';
 import { DatePipe, formatDate } from '@angular/common';
@@ -15,14 +15,15 @@ export class HomeComponent implements OnInit {
   name = 'Angular 5';
   cotacao = [
     {
-      name: 'dolar',
+      name: '($) dolar ',
       value: 'dolar',
     },
     {
-      name: 'real',
+      name: '(R$) real ',
       value: 'real',
     },
   ];
+  cotac = false;
   currency: string;
   myDate: any;
   today = new Date();
@@ -36,26 +37,15 @@ export class HomeComponent implements OnInit {
     public activeRoute: ActivatedRoute,
     private homeService: HomeService,
     private formBuilder: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
   ngOnInit() {
-    console.log(this.myDate);
-
-    // this.selected = undefined;
-    // fetch('https://jsonplaceholder.typicode.com/todos/1')
-    //   .then((response) => response.json())
-    //   .then((json) => console.log(json));
     this.initForm();
     this.getCotacao();
   }
 
   valueChange(event) {
-    console.log(
-      'selected value',
-      event.target.value,
-      'value of selected',
-      this.selected
-    );
     //this.selected = event.target.value;
   }
 
@@ -68,8 +58,7 @@ export class HomeComponent implements OnInit {
           this.valueDolar = e.cotacaoCompra;
         });
       },
-      error: (e) => console.error(e),
-      complete: () => console.info('complete'),
+      error: (e) => alert('Cotação indisponivel, tente novamente mais tarde'),
     });
   }
   getdate() {
@@ -81,18 +70,21 @@ export class HomeComponent implements OnInit {
   Cotar() {
     let val = this.formCotacao.get('valorCotacao').value;
     if (this.selected === 'dolar') {
-      this.currency = 'R$';
-
+      this.currency = '$';
       this.resultCotacao = val * this.valueDolar;
     } else {
-      this.currency = '$';
+      this.currency = 'R$';
       this.resultCotacao = val / this.valueDolar;
     }
+    this.cotac = true;
   }
-
+  comprar() {
+    this.router.navigate(['/cadastro']);
+  }
   initForm() {
     this.formCotacao = this.formBuilder.group({
       valorCotacao: [null, Validators.compose([Validators.required])],
+      valueCheck: [null, Validators.compose([Validators.required])],
     });
   }
 }

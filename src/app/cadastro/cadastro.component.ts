@@ -12,7 +12,11 @@ import { DatePipe, formatDate } from '@angular/common';
   styleUrls: ['./cadastro.component.css'],
 })
 export class CadastroComponent implements OnInit {
+  valueFrete;
+  responseCadastro;
+  responseCadastroDis;
   responseValue;
+  freteTable = false;
   formCadastro: FormGroup;
   cep: string;
   bairro: string;
@@ -27,16 +31,26 @@ export class CadastroComponent implements OnInit {
   ngOnInit() {
     this.initForm();
   }
-  getFrete(rua, cidade, bairro) {
-    console.log('frete');
+  getFrete(rua, bairro, estado) {
     let val = this.formCadastro.get('cep').value;
 
-    this.cadastroService.getFrete().subscribe({
+    this.cadastroService.getFrete(rua, bairro, estado).subscribe({
       next: (response) => {
-        console.log(response);
+        let rs = response;
+        this.responseCadastro = parseFloat(
+          rs.rows[0].elements[0].distance.value
+        );
+        this.responseCadastroDis = rs.rows[0].elements[0].distance.text;
+        this.responseCadastro = this.responseCadastro / 1000;
+        this.valueFrete = this.responseCadastro.toLocaleString('pt-br', {
+          style: 'currency',
+          currency: 'BRL',
+        });
+        this.freteTable = true;
       },
-      error: (e) => console.error(e),
-      complete: () => console.info('complete'),
+      error(err) {
+        alert('Cep Inválido');
+      },
     });
   }
 
@@ -46,14 +60,13 @@ export class CadastroComponent implements OnInit {
     this.cadastroService.getCadastro(val).subscribe({
       next: (response) => {
         this.responseValue = response;
-        console.log(this.responseValue);
         this.rua = this.responseValue.logradouro;
         this.bairro = this.responseValue.bairro;
         this.estado = this.responseValue.estado;
         this.getFrete(this.rua, this.bairro, this.estado);
       },
       error(err) {
-        console.log(err);
+        alert('Cep Inválido');
       },
     });
   }
@@ -63,5 +76,9 @@ export class CadastroComponent implements OnInit {
       nome: [null, Validators.compose([Validators.required])],
       cep: [null, Validators.compose([Validators.required])],
     });
+  }
+
+  contratar() {
+    alert('Obrigada!Serviço contrado com sucesso!');
   }
 }

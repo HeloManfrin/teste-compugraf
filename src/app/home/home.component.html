@@ -1,29 +1,36 @@
 <div class="container-sm">
 
-  <h1 class="container px-4 text-center">Cotação e Compra de Dólar</h1>
-  <h2>Cotacao do dia:<br>
-    dolar{{valueDolar | currency:'$'}}</h2>
+  <h1 class="container px-4 text-center">Cotação e Compra de Moeda</h1>
+  <h2 class="mb-3 mt-3">Cotação:
+    {{valueDolar | currency:'$'}}</h2>
 
-  <form #f="ngForm">
-    <select class="form-select form-select-lg mb-3" [(ngModel)]="selected" name="valueCheck" (change)="valueChange($event)">
-      <option [ngValue]="undefined" disabled>Selecione a moeda</option>
-      <option *ngFor="let c of cotacao" [ngValue]="c.value" [selected]="c.name == selected">
-        {{ c.name }}
-      </option>
-    </select>
-  </form>
-
-  <div class="row">
-    <div class="col" [formGroup]="formCotacao">
-      <input type="number" class="form-control" formControlName="valorCotacao" placeholder="Digite o valor que deseja comprar" aria-label="valorCotacao">
+  <form [formGroup]="formCotacao">
+    <div class="row">
+      <div class="col-6">
+        <select class="form-select form-select " [(ngModel)]="selected" name="valueCheck" (change)="valueChange($event)" formControlName="valueCheck">
+          <option [ngValue]="undefined" disabled>Selecione a moeda</option>
+          <option *ngFor="let c of cotacao" [ngValue]="c.value" [selected]="c.name == selected">
+            {{ c.name }}
+          </option>
+        </select>
+      </div>
     </div>
+
+
+    <div class="row">
+      <div class="col-6">
+        <input type="number" class="form-control mt-3" formControlName="valorCotacao" placeholder="Digite o valor que deseja comprar" aria-label="valorCotacao">
+      </div>
+      <br><br>
+    </div>
+
+    <button class="col-5" type="button" (click)="Cotar()" class="btn btn-success mt-3">Cotar</button>
+
+  </form>
+  <div *ngIf="cotac">
+    <h3 class="mt-3">Cotação de compra:</h3>
+    {{resultCotacao | currency: currency }}
     <br><br>
+    <button [disabled]="formCotacao.invalid" class="col-4" type="button" class="btn btn-success mt-3" (click)="comprar()">Comprar</button>
   </div>
-  <div class="row">
-    <button class="col-4" type="button" (click)="Cotar()" class="btn btn-primary">Cotar</button>
-    <button class="col-4" type="button" class="btn btn-primary">Comprar</button>
-  </div>
-  <h3>Cotacao de compra</h3>
-  {{resultCotacao | currency: currency }}
-  <!-- <div> cotacao: {{ this.responseValue[0]?.cotacaoCompra | currency}}</div> -->
 </div>
