@@ -1,0 +1,20 @@
+<div class="container-sm">
+
+  <h1 class="container px-4 text-center">Cadastro de cliente</h1>
+  <p>Favor preencher seu cadastro.</p>
+  <form #f="ngForm">
+
+
+
+    <div class="row">
+      <div class="col" [formGroup]="formCadastro">
+        <input type="text" class="form-control" formControlName="cep" placeholder="Digite o seu cep" aria-label="cep">
+
+        <input type="text" class="form-control" formControlName="nome" placeholder="Digite o seu cep" aria-label="nome">
+      </div>
+      <br><br>
+    </div>
+    <button type="button" (click)="getCep()" class="btn btn-primary">Calcular</button>
+  </form>
+
+</div>

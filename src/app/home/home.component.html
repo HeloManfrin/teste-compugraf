@@ -1,0 +1,29 @@
+<div class="container-sm">
+
+  <h1 class="container px-4 text-center">Cotação e Compra de Dólar</h1>
+  <h2>Cotacao do dia:<br>
+    dolar{{valueDolar | currency:'$'}}</h2>
+
+  <form #f="ngForm">
+    <select class="form-select form-select-lg mb-3" [(ngModel)]="selected" name="valueCheck" (change)="valueChange($event)">
+      <option [ngValue]="undefined" disabled>Selecione a moeda</option>
+      <option *ngFor="let c of cotacao" [ngValue]="c.value" [selected]="c.name == selected">
+        {{ c.name }}
+      </option>
+    </select>
+  </form>
+
+  <div class="row">
+    <div class="col" [formGroup]="formCotacao">
+      <input type="number" class="form-control" formControlName="valorCotacao" placeholder="Digite o valor que deseja comprar" aria-label="valorCotacao">
+    </div>
+    <br><br>
+  </div>
+  <div class="row">
+    <button class="col-4" type="button" (click)="Cotar()" class="btn btn-primary">Cotar</button>
+    <button class="col-4" type="button" class="btn btn-primary">Comprar</button>
+  </div>
+  <h3>Cotacao de compra</h3>
+  {{resultCotacao | currency: currency }}
+  <!-- <div> cotacao: {{ this.responseValue[0]?.cotacaoCompra | currency}}</div> -->
+</div>
